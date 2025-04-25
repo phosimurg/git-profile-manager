@@ -1,0 +1,21 @@
+.active-profile {
+    width: 100%;
+}
+
+.active-profile h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.profile-details {
+    background-color: white;
+    border-radius: 4px;
+    padding: 15px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.profile-details p {
+    margin: 5px 0;
+    font-size: 14px;
+}

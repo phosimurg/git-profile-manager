@@ -1,0 +1,59 @@
+{
+  "name": "git-profile-manager",
+  "version": "1.0.0",
+  "description": "Git profilleri arasında geçiş yapmayı kolaylaştıran bir uygulama",
+  "main": "electron/main.js",
+  "homepage": "./",
+  "scripts": {
+    "start": "cross-env BROWSER=none react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "electron:dev": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron --disable-web-security .\"",
+    "electron:build": "npm run build && electron-builder",
+    "electron:start": "wait-on http://localhost:3000 && electron --disable-web-security ."
+  },
+  "dependencies": {
+    "electron-is-dev": "^2.0.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "web-vitals": "^2.1.4"
+  },
+  "devDependencies": {
+    "concurrently": "^7.3.0",
+    "cross-env": "^7.0.3",
+    "electron": "^20.0.0",
+    "electron-builder": "^23.3.3",
+    "react-scripts": "5.0.1",
+    "wait-on": "^6.0.1"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "build": {
+    "appId": "com.gitprofilemanager",
+    "productName": "Git Profile Manager",
+    "files": [
+      "build/**/*",
+      "electron/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    }
+  }
+}
