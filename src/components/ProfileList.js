@@ -1,5 +1,5 @@
 import React from 'react';
-import './ProfileList.css';
+import './styles/ProfileList.css';
 
 function ProfileList({profiles, activeProfile, onActivate, onEdit, onDelete}) {
     // İki profilin aynı olup olmadığını kontrol et

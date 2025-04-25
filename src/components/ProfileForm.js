@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import './ProfileForm.css';
+import './styles/ProfileForm.css';
 
 function ProfileForm({profile, onSave, onCancel}) {
     const [formData, setFormData] = useState({

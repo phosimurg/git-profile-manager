@@ -3,6 +3,7 @@ import './App.css';
 import ProfileList from './components/ProfileList';
 import ProfileForm from './components/ProfileForm';
 import ActiveProfile from './components/ActiveProfile';
+import ToastContainer from './components/ToastContainer';
 
 // Electron API'sini kontrol ediyoruz
 const electronAPI = window.electronAPI || null;
@@ -15,6 +16,20 @@ function App() {
     const [editingProfile, setEditingProfile] = useState(null);
     const [externalChangeDetected, setExternalChangeDetected] = useState(false);
     const [externalProfile, setExternalProfile] = useState(null);
+
+    // Toast bildirimleri için state
+    const [toasts, setToasts] = useState([]);
+
+    // Toast bildirimi ekleme fonksiyonu
+    const addToast = useCallback((message, type = 'info', duration = 3000) => {
+        const id = Date.now();
+        setToasts(prevToasts => [...prevToasts, { id, message, type, duration }]);
+    }, []);
+
+    // Toast bildirimini kaldırma fonksiyonu
+    const removeToast = useCallback((id) => {
+        setToasts(prevToasts => prevToasts.filter(toast => toast.id !== id));
+    }, []);
 
     // Profilleri yükle
     const loadProfiles = useCallback(async () => {
@@ -31,8 +46,9 @@ function App() {
         } catch (err) {
             console.error('Profiller yüklenemedi:', err);
             setProfiles([]);
+            addToast('Profiller yüklenirken hata oluştu', 'error');
         }
-    }, []);
+    }, [addToast]);
 
     // Aktif profili yükle
     const loadActiveProfile = useCallback(async () => {
@@ -46,8 +62,9 @@ function App() {
             setActiveProfile(active);
         } catch (err) {
             console.error('Aktif profil yüklenemedi:', err);
+            addToast('Aktif profil bilgisi alınamadı', 'error');
         }
-    }, []);
+    }, [addToast]);
 
     // Git config değişikliklerini dinle
     const setupGitConfigListener = useCallback(() => {
@@ -65,11 +82,13 @@ function App() {
             if (!matchingProfile && newConfig.name && newConfig.email) {
                 setExternalChangeDetected(true);
                 setExternalProfile(newConfig);
+                // Dış değişiklik algılandığında bildirim göster
+                addToast('Git config dosyasında değişiklik algılandı', 'info', 5000);
             } else {
                 setExternalChangeDetected(false);
             }
         });
-    }, [profiles]);
+    }, [profiles, addToast]);
 
     // İlk yükleme
     useEffect(() => {
@@ -97,9 +116,13 @@ function App() {
 
     // Profil silme işleyicisi
     const handleDeleteProfile = useCallback(async (profileId) => {
+        const deletedProfile = profiles.find(p => p.id === profileId);
         const updatedProfiles = profiles.filter(p => p.id !== profileId);
         await saveProfiles(updatedProfiles);
-    }, [profiles]);
+
+        // Silme işlemi sonrası bildirim göster
+        addToast(`"${deletedProfile?.name}" profili silindi`, 'success');
+    }, [profiles, addToast]);
 
     // Profilleri kaydet
     const saveProfiles = useCallback(async (updatedProfiles) => {
@@ -113,8 +136,9 @@ function App() {
             setProfiles(updatedProfiles);
         } catch (err) {
             console.error('Profiller kaydedilemedi:', err);
+            addToast('Profiller kaydedilirken hata oluştu', 'error');
         }
-    }, []);
+    }, [electronAPI, addToast]);
 
     // Profil aktifleştirme işleyicisi
     const handleActivateProfile = useCallback(async (profile) => {
@@ -123,6 +147,7 @@ function App() {
                 name: profile.name,
                 email: profile.email
             });
+            addToast(`"${profile.name}" profili aktifleştirildi`, 'success');
             return;
         }
 
@@ -135,20 +160,26 @@ function App() {
                 name: profile.name,
                 email: profile.email
             });
+            addToast(`"${profile.name}" profili aktifleştirildi`, 'success');
         } catch (err) {
             console.error('Profil aktifleştirilemedi:', err);
+            addToast('Profil aktifleştirilemedi', 'error');
         }
-    }, []);
+    }, [electronAPI, addToast]);
 
     // Profil kaydetme işleyicisi
     const handleSaveProfile = useCallback(async (profile) => {
         let updatedProfiles;
+        let isEdit = false;
 
         if (editingProfile) {
+            // Düzenleme
             updatedProfiles = profiles.map(p =>
                 p.id === editingProfile.id ? { ...profile, id: p.id } : p
             );
+            isEdit = true;
         } else {
+            // Yeni ekleme
             const newProfile = {
                 ...profile,
                 id: Date.now().toString()
@@ -158,7 +189,14 @@ function App() {
 
         await saveProfiles(updatedProfiles);
         setShowAddForm(false);
-    }, [editingProfile, profiles, saveProfiles]);
+
+        // İşlem sonrası bildirim göster
+        if (isEdit) {
+            addToast(`"${profile.name}" profili güncellendi`, 'success');
+        } else {
+            addToast(`"${profile.name}" profili eklendi`, 'success');
+        }
+    }, [editingProfile, profiles, saveProfiles, addToast]);
 
     // İptal butonu işleyicisi
     const handleCancelForm = useCallback(() => {
@@ -176,13 +214,15 @@ function App() {
             });
             setShowAddForm(true);
             setExternalChangeDetected(false);
+            addToast('Dış değişiklikten yeni profil oluşturuluyor', 'info');
         }
-    }, [externalProfile]);
+    }, [externalProfile, addToast]);
 
     // Dış değişikliği yoksay
     const handleIgnoreExternalChange = useCallback(() => {
         setExternalChangeDetected(false);
-    }, []);
+        addToast('Dış değişiklik yok sayıldı', 'warning');
+    }, [addToast]);
 
     return (
         <div className="app">
@@ -233,6 +273,9 @@ function App() {
                     </div>
                 </div>
             )}
+
+            {/* Toast bildirimlerini göster */}
+            <ToastContainer toasts={toasts} removeToast={removeToast} />
         </div>
     );
 }
