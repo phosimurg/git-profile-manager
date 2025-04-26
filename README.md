@@ -1,121 +1,119 @@
-## Yeni Özelliklerin Test Edilmesi
+# Git Profile Manager
 
-### İlk Açılışta Otomatik Profil Oluşturma
+An Electron application to easily switch between multiple Git profiles. 
 
-İlk kez çalıştırıldığında, uygulama bilgisayarınızdaki git config'ten kullanıcı adı ve e-posta bilgilerini okuyarak otomatik bir profil oluşturacaktır.
+By Ahmet YILDIZ | phosimurg
 
-Testler için:
-1. Uygulama verilerini temizleyin (genellikle `%APPDATA%/git-profile-manager` klasörü)
-2. Git config'inizde bir kullanıcı ve e-posta ayarlı olduğundan emin olun
-3. Uygulamayı başlatın
-4. Otomatik olarak bir profil oluşturulduğunu göreceksiniz
+## Features
 
-### Dış Değişiklikleri Tespit Etme
+- Add, delete, edit, and activate profiles
+- View the currently active profile
+- Manage Git config settings easily
+- Automatically create a profile on first launch
+- Detect external Git config changes and offer to save them
 
-Uygulama dışında git config değiştirildiğinde, uygulama bu değişikliği tespit edecek ve kullanıcıya bildirecektir.
+## New Feature Testing
 
-Testler için:
-1. Uygulamayı çalıştırın
-2. Başka bir terminal/komut satırı açın
-3. `git config --global user.name "Yeni İsim"` ve `git config --global user.email "yeni@email.com"` komutlarını çalıştırın
-4. 10 saniye içinde, uygulama değişikliği tespit edecek ve bir bildirim gösterecektir
-5. "Profil Olarak Kaydet" düğmesine tıklayabilir veya değişikliği yok sayabilirsiniz# Git Profil Yöneticisi
+### Automatic Profile Creation on First Launch
 
-Git profilleri arasında geçiş yapmayı kolaylaştıran bir Electron uygulaması.
+When you launch the application for the first time, it will automatically create a profile by reading the username and email from your local Git config.
 
-## Özellikler
+**How to Test:**
 
-- Profil ekleme, silme, düzenleme, aktifleştirme
-- Aktif profilin görüntülenmesi
-- Git config ayarlarının kolay yönetimi
-- İlk açılışta otomatik profil oluşturma
-- Dış değişiklikleri tespit etme ve profil olarak kaydetme seçeneği
+1. Clear the application data (usually located at `%APPDATA%/git-profile-manager`).
+2. Ensure your Git configuration (`git config`) has a username and email set.
+3. Launch the application.
+4. A profile should be created automatically.
 
-## Kurulum
+### Detecting External Changes
 
-### Gerekli Paketleri Yükleme
+If the Git config is changed outside the application, Git Profile Manager will detect it and notify you.
+
+**How to Test:**
+
+1. Start the application.
+2. Open another terminal or command prompt.
+3. Run the following commands:
+   ```bash
+   git config --global user.name "New Name"
+   git config --global user.email "new@email.com"
+   ```
+4. Within 10 seconds, the application will detect the changes and show a notification.
+5. You can click "Save as Profile" or ignore the changes.
+
+## Installation
+
+### Install Dependencies
 
 ```bash
 npm install
 ```
 
-### Geliştirme Modunda Çalıştırma
+### Run in Development Mode
 
 ```bash
-# Bu komut önce React sunucusunu başlatacak, sonra Electron uygulamasını çalıştıracak
+# This command will start the React server and then launch the Electron app
 npm run electron:dev
 ```
 
-### Uygulamayı Build Etme
+### Build the Application
 
 ```bash
 npm run electron:build
 ```
 
-## Proje Yapısı
+## Project Structure
 
 ```
 git-profile-manager/
 ├── electron/
-│   ├── main.js       # Electron ana süreci
-│   └── preload.js    # Preload script - API bağlantısı
-├── public/           # React statik dosyaları
+│   ├── main.js       # Electron main process
+│   └── preload.js    # Preload script for API communication
+├── public/           # React static files
 ├── src/
-│   ├── components/   # React bileşenleri
+│   ├── components/   # React components
 │   │   ├── ActiveProfile.js
 │   │   ├── ProfileForm.js
 │   │   └── ProfileList.js
-│   ├── App.js        # Ana uygulama bileşeni
-│   └── index.js      # React giriş noktası
-└── package.json      # Proje bağımlılıkları ve komutlar
+│   ├── App.js        # Main app component
+│   └── index.js      # React entry point
+└── package.json      # Project dependencies and scripts
 ```
 
-## Proje Kurulum Adımları
+## Setup Steps
 
-1. Gerekli npm paketlerini ekleyin:
+1. Install the required npm packages:
 
 ```bash
 npm install wait-on concurrently electron electron-is-dev --save-dev
 ```
 
-2. "electron:dev" komutunu kullanarak uygulamayı çalıştırın:
+2. Start the application:
 
 ```bash
 npm run electron:dev
 ```
 
-## Sorun Giderme
+## Troubleshooting
 
-### React Hook Hataları
-React hook hataları genellikle birden fazla React sürümünün projeye dahil edilmesinden kaynaklanır. Aşağıdaki adımları deneyin:
+### React Hook Errors
 
-1. node_modules klasörünü temizleyin:
+If you encounter React Hook errors, it might be caused by multiple versions of React being included. Follow these steps:
+
 ```bash
 rm -rf node_modules
-```
-
-2. package-lock.json dosyasını silin:
-```bash
 rm package-lock.json
-```
-
-3. Bağımlılıkları yeniden yükleyin:
-```bash
 npm install
-```
-
-4. Uygulamayı yeniden başlatın:
-```bash
 npm run electron:dev
 ```
 
-### Uygulama Beyaz Ekran Gösteriyor
-1. Terminalde hata mesajlarını kontrol edin
-2. React development sunucusunun çalıştığından emin olun (localhost:3000)
-3. Electron ile React arasındaki iletişimi kontrol edin - preload.js'nin doğru yüklendiğinden emin olun
-4. CSP (Content Security Policy) hatalarını çözmek için development modunda Electron'u çalıştırırken `--disable-web-security` parametresini ekleyebilirsiniz:
+### Application Shows a Blank Screen
 
-```bash
-# package.json içindeki electron:start komutunu güncelle
+- Check for error messages in the terminal.
+- Make sure the React development server (usually running at `localhost:3000`) is active.
+- Ensure the preload script (`preload.js`) is correctly loaded.
+- If you encounter CSP (Content Security Policy) errors, you can temporarily disable web security during development by updating the `package.json` script:
+
+```json
 "electron:start": "wait-on http://localhost:3000 && electron --disable-web-security ."
 ```
