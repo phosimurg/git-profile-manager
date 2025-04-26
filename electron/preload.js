@@ -11,6 +11,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
     saveProfiles: (profiles) => ipcRenderer.invoke('save-profiles', profiles),
     getProfiles: () => ipcRenderer.invoke('get-profiles'),
 
+    // SSH dosya seçici
+    selectSSHKeyFile: () => ipcRenderer.invoke('select-ssh-key-file'),
+
     // Olay dinleyicileri
     onGitConfigChanged: (callback) => {
         ipcRenderer.on('git-config-changed', (_event, value) => callback(value));

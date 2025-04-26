@@ -54,12 +54,17 @@
     font-size: 12px;
 }
 
+.profile-actions button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 .activate-btn {
     background-color: #4CAF50;
     color: white;
 }
 
-.activate-btn:hover {
+.activate-btn:hover:not(:disabled) {
     background-color: #45a049;
 }
 
@@ -77,6 +82,69 @@
     color: white;
 }
 
-.delete-btn:hover {
+.delete-btn:hover:not(:disabled) {
     background-color: #d32f2f;
+}
+
+.active-indicator {
+    display: inline-block;
+    padding: 5px 10px;
+    /*background-color: #4CAF50;*/
+    border-color: #4CAF50;
+    border-width: 1px;
+    border-style: solid;
+    color: #4CAF50;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Arama kutusu için yeni stiller */
+.search-container {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 35px 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #2196F3;
+    box-shadow: 0 1px 3px rgba(33, 150, 243, 0.3);
+}
+
+.clear-search {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #999;
+    cursor: pointer;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.clear-search:hover {
+    color: #f44336;
+}
+
+.no-results {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    padding: 20px 0;
 }

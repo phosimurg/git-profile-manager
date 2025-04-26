@@ -68,18 +68,50 @@
     font-size: 24px;
 }
 
+.header-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.import-export-buttons {
+    display: flex;
+    gap: 5px;
+}
+
 .app-header button {
-    background-color: #4CAF50;
-    color: white;
     border: none;
-    padding: 10px 15px;
+    padding: 8px 12px;
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
 }
 
-.app-header button:hover {
+.add-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.add-btn:hover {
     background-color: #45a049;
+}
+
+.import-btn {
+    background-color: #2196F3;
+    color: white;
+}
+
+.import-btn:hover {
+    background-color: #0b7dda;
+}
+
+.export-btn {
+    background-color: #ff9800;
+    color: white;
+}
+
+.export-btn:hover {
+    background-color: #e68a00;
 }
 
 .app-container {
