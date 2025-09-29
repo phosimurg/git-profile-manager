@@ -57,12 +57,18 @@
       "package.json"
     ],
     "directories": {
-      "buildResources": "assets"
+      "buildResources": "build-resources"
     },
     "mac": {
       "category": "public.app-category.developer-tools",
       "target": ["dmg"],
-      "icon": "assets/icon.icns"
+      "icon": "assets/icon.icns",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "identity": "AHMET YILDIZ (C58CBKZPU4)",
+      "type": "distribution",
+      "entitlements": "build-resources/entitlements.mac.plist",
+      "entitlementsInherit": "build-resources/entitlements.mac.plist"
     },
     "win": {
       "target": ["nsis"],
@@ -71,6 +77,8 @@
     "linux": {
       "target": ["AppImage", "deb"],
       "category": "Development"
-    }
+    },
+    "asar": true,
+    "forceCodeSigning": true
   }
 }
