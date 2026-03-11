@@ -15,6 +15,7 @@ function App() {
     const [showAddForm, setShowAddForm] = useState(false);
     const [editingProfile, setEditingProfile] = useState(null);
     const [externalChangeDetected, setExternalChangeDetected] = useState(false);
+    // eslint-disable-next-line no-unused-vars
     const [externalProfile, setExternalProfile] = useState(null);
 
     // Yükleme durumu için state
@@ -122,6 +123,22 @@ function App() {
         setShowAddForm(true);
     }, []);
 
+    // Profilleri kaydet
+    const saveProfiles = useCallback(async (updatedProfiles) => {
+        if (!electronAPI) {
+            setProfiles(updatedProfiles);
+            return;
+        }
+
+        try {
+            await electronAPI.saveProfiles(updatedProfiles);
+            setProfiles(updatedProfiles);
+        } catch (err) {
+            console.error('Failed to save profiles:', err);
+            addToast('Error saving profiles', 'error');
+        }
+    }, [addToast]);
+
     // Profil silme işleyicisi
     const handleDeleteProfile = useCallback(async (profileId) => {
         const deletedProfile = profiles.find(p => p.id === profileId);
@@ -139,23 +156,7 @@ function App() {
 
         // Silme işlemi sonrası bildirim göster
         addToast(`Profile "${deletedProfile?.name}" deleted`, 'success');
-    }, [profiles, activeProfile, addToast]);
-
-    // Profilleri kaydet
-    const saveProfiles = useCallback(async (updatedProfiles) => {
-        if (!electronAPI) {
-            setProfiles(updatedProfiles);
-            return;
-        }
-
-        try {
-            await electronAPI.saveProfiles(updatedProfiles);
-            setProfiles(updatedProfiles);
-        } catch (err) {
-            console.error('Failed to save profiles:', err);
-            addToast('Error saving profiles', 'error');
-        }
-    }, [electronAPI, addToast]);
+    }, [profiles, activeProfile, addToast, saveProfiles]);
 
     // Profil aktifleştirme işleyicisi - tamamen yeniden yazıldı
     const handleActivateProfile = useCallback(async (profile) => {
@@ -244,7 +245,7 @@ function App() {
                 setIsLoading(false);
             }, 2000);
         }
-    }, [activeProfile, electronAPI, addToast, loadActiveProfile]);
+    }, [activeProfile, addToast, loadActiveProfile]);
 
     // Profil kaydetme işleyicisi
     const handleSaveProfile = useCallback(async (profile) => {
