@@ -26,7 +26,6 @@ function createWindow() {
             preload: path.join(__dirname, 'preload.js'),
             nodeIntegration: false,
             contextIsolation: true,
-            enableRemoteModule: false,
         },
         icon: path.join(__dirname, '../assets/icon.png'),
     });

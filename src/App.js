@@ -421,7 +421,11 @@ function App() {
     return (
         <div className="app">
             <header className="app-header">
-                <h1>Git Profile Manager</h1>
+                <div>
+                    <h1>Git Profile Manager</h1>
+                    <p>www.phosimurg.com</p>
+                </div>
+
                 <div className="header-actions">
                     <div className="import-export-buttons">
                         <button onClick={() => document.getElementById('import-file').click()} className="import-btn">

@@ -80,7 +80,7 @@ builder.build({
             icon: 'assets/icon.icns',
             hardenedRuntime: true,
             gatekeeperAssess: false,
-            identity: "AHMET YILDIZ (C58CBKZPU4)",
+            identity: process.env.MAC_SIGNING_IDENTITY || "AHMET YILDIZ (C58CBKZPU4)",
             type: 'distribution',
             entitlements: 'build-resources/entitlements.mac.plist',
             entitlementsInherit: 'build-resources/entitlements.mac.plist'
@@ -111,7 +111,6 @@ builder.build({
         asar: true,
         asarUnpack: ['**/*.node'],
         extends: null,
-        forceCodeSigning: true,
     },
 }).catch((error) => {
     console.error('Error during build:', error);
