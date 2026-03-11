@@ -99,7 +99,7 @@ jobs:
         run: npm run build
 
       - name: Build Electron app (Windows - unsigned)
-        run: npx electron-builder build --win
+        run: npx electron-builder build --win --publish never
 
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4

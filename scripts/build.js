@@ -3,6 +3,7 @@ const path = require('path');
 
 // Yapılandırma
 builder.build({
+    publish: "never",
     config: {
         appId: 'com.phosimurg.gitprofilemanager',
         productName: 'Git Profile Manager',
